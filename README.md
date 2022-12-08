@@ -43,7 +43,7 @@ python3 -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-* Можете устоновить свои настойки в директории где находить файл settings.py нахвав свой файл с настройками settings_local.py
+* Можете устоновить свои настойки в директории где находить файл settings.py назвав свой файл с настройками settings_local.py
 
 * Выполните миграции:
 ```bash
