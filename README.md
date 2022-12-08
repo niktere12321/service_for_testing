@@ -53,6 +53,11 @@ cd service_for_testing/
 python manage.py migrate
 ```
 
+* Создайте суперпользователя:
+```bash
+python manage.py createsuperuser
+```
+
 * Запустите сервер:
 ```bash
 python manage.py runserver
