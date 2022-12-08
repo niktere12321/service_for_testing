@@ -27,7 +27,7 @@ cd service_for_testing/
 * Cоздать и активировать виртуальное окружение:
 
 ```bash
-python -m venv env
+python -m venv venv
 ```
 
 ```bash
