@@ -47,7 +47,7 @@ pip install -r requirements.txt
 
 * Выполните миграции:
 ```bash
-cd service_for_testing/
+cd service/
 ```
 ```bash
 python manage.py migrate
