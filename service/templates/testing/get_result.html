@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block tittle %}
+Тест {{ object }}
+{% endblock %}
+{% block content %}
+  <div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+    <h1>{{ object }}</h1>
+    <p>Правильные ответы: {{ object.true_in_test }}</p>
+    <p>Не правильные ответы: {{fasle_answer}} </p>
+    <p>Максимум баллов: {{ object.all_point_test }}</p>
+    <p>Процент: {{ procent }}%</p>
+    <p>Прошли: {{ object.pub_date|date }}</p>
+  </div>
+
+{% endblock %}

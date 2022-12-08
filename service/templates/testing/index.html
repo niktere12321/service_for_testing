@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block tittle %}
+{% if filter %}
+  Все пройденыне тесты
+{% else %}
+  Все тесты
+{%endif%}
+{% endblock %}
+{% block content %}
+  <div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+    <h1 class="text-center-main">
+      {% if filter %}
+        Все пройденыне тесты
+      {% else %}
+        Все тесты
+      {%endif%}
+    </h1>
+    <ul>
+      {% for test in object_list %}
+      <li>
+        {{ test }}
+        {% if filter %}
+        <button>
+          <a href="{% url 'testing:get_result' test.pk %}">
+            Посмотреть результат
+          </a>
+        </button>
+        {% else %}
+        <button>
+          <a href="{% url 'testing:testing'%}?id={{test.pk}}">
+            Пройти тест
+          </a>
+        </button>
+        {%endif%}
+      </li>
+      {% endfor %}
+    </ul>
+    <div class="pagination">
+      <span class="step-links">
+          {% if page_obj.has_previous %}
+            {% if filter %}
+              <a href="?page=1&filter=passed">&laquo; Первая</a>
+              <a href="?page={{ page_obj.previous_page_number }}&filter=passed">предыдущая</a>
+            {% else %}
+              <a href="?page=1">&laquo; Первая</a>
+              <a href="?page={{ page_obj.previous_page_number }}">предыдущая</a>
+              {% endif %}
+          {% endif %}
+
+          <span class="current">
+              Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+          </span>
+
+          {% if page_obj.has_next %}
+            {% if filter %}
+              <a href="?page={{ page_obj.next_page_number }}&filter=passed">&laquo; следующая</a>
+              <a href="?page={{ page_obj.paginator.num_pages }}&filter=passed">последняя</a>
+            {% else %}
+              <a href="?page={{ page_obj.next_page_number }}">следующая</a>
+              <a href="?page={{ page_obj.paginator.num_pages }}">последняя &raquo;</a>
+            {% endif %}
+          {% endif %}
+      </span>
+    </div>
+  </div>
+
+{% endblock %}

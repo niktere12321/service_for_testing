@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block tittle %}
+Пройти тест
+{% endblock %}
+{% block content %}
+  <div style="display: flex; justify-content: center;">
+    <h1 class="text-center-main">
+      Пройти тест {{ test.text }}
+    </h1>
+  </div>
+  <div style="display: flex; justify-content: center; align-items: center">
+    <form method="post">
+      {% csrf_token %}
+      {% for question in questions %}
+      <h4>
+        {{question.title}}
+      </h4>
+        {% for choice_answer in question.choice_answer.all %}
+        <label for="id_{{question.pk}}-{{choice_answer.pk}}">
+          {{choice_answer.title}}
+        </label>
+        <input type="radio" class="choice_answer_{{question.pk}}" name="{{question.pk}}-{{choice_answer.pk}}" required id="{{question.pk}}-{{choice_answer.pk}}">
+        {% endfor %}
+      {% endfor %}
+      </br>
+      <button type="submit">
+        отправить
+      </button>
+    </form>
+  </div>
+<script type="text/javascript">
+  function changeRadio (list, pk) {
+    for (let i=0; i<list.length; i++) {
+      if (pk != i) {
+        list[i].checked = false;
+      }
+      list[i].removeAttribute("required");
+    }
+    list[pk].setAttribute("required", "required");
+  }
+  let arrayQuestion = new Array()
+  {% for question in questions %}
+    arrayQuestion.push({{question.pk}})
+  {% endfor %}
+  for (let i=0; i<arrayQuestion.length; i++) {
+    let inputList = document.querySelectorAll(`input.choice_answer_${arrayQuestion[i]}`)
+    for (let p=0; p<inputList.length; p++) {
+      inputList[p].addEventListener("click", function () {
+        changeRadio(inputList, p)}
+      )
+    }
+  }
+</script>
+{% endblock %}
