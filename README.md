@@ -27,7 +27,7 @@ cd service_for_testing/
 * Cоздать и активировать виртуальное окружение:
 
 ```bash
-python -m venv env
+python -m venv venv
 ```
 
 ```bash
@@ -47,7 +47,7 @@ pip install -r requirements.txt
 
 * Выполните миграции:
 ```bash
-cd service_for_testing/
+cd service/
 ```
 ```bash
 python manage.py migrate
