@@ -47,30 +47,31 @@ class GetResult(generic.DetailView):
 def testing(request):
     test = Test.objects.get(pk=request.GET.get('id'))
     questions = test.question.all()
+    question_num = request.session.get('question_num', 0)
+    question = questions[question_num]
     if request.POST:
-        count_all = 0
-        count_true = 0
-        choice_answer = []
-        for question in questions:
-            choice = question.choice_answer.all()
-            for answer in choice:
-                choice_answer.append(answer)
+        count_true = request.session.get('count_true', 0)
         data = []
         for key in dict(request.POST):
             if key == 'csrfmiddlewaretoken':
                 continue
-            data_key = key.split('-')
-            data.append((data_key[0], data_key[1],))
+            data.append(key)
         for answer in data:
-            if get_object_or_404(Choice, pk=int(answer[1])).true_or_false is True:
+            if get_object_or_404(Choice, pk=int(answer)).true_or_false is True:
                 count_true += 1
-            count_all += 1
-        test_tasks = TestTasks()
-        test_tasks.test = test
-        test_tasks.user = request.user
-        test_tasks.true_in_test = count_true
-        test_tasks.all_point_test = count_all
-        test_tasks.save()
-        return redirect(reverse('testing:get_result', args=[test_tasks.pk]))
-    context = {'questions': questions}
+        question_num = question_num + 1
+        if question_num == len(questions):
+            test_tasks = TestTasks()
+            test_tasks.test = test
+            test_tasks.user = request.user
+            test_tasks.true_in_test = count_true
+            test_tasks.all_point_test = len(questions)
+            test_tasks.save()
+            del request.session['count_true']
+            del request.session['question_num']
+            return redirect(reverse('testing:get_result', args=[test_tasks.pk]))
+        request.session['count_true'] = count_true
+        request.session['question_num'] = question_num
+        return redirect(reverse('testing:testing') + f'?id={test.pk}')
+    context = {'question': question}
     return render(request, 'testing/testing.html', context)
